@@ -1,9 +1,9 @@
-import re
+from re import findall
 
 
 def part_1(instructions: str):
     result = 0
-    for mul_instruction in re.findall(r"mul\([0-9]+,[0-9]+\)", instructions):
+    for mul_instruction in findall(r"mul\([0-9]+,[0-9]+\)", instructions):
         num1, num2 = map(int, mul_instruction.removeprefix("mul(").removesuffix(")").split(","))
         result += num1 * num2
     return result
@@ -12,7 +12,7 @@ def part_1(instructions: str):
 def part_2(instructions: str):
     result = 0
     active = True
-    for valid_instruction in re.findall(r"mul\([0-9]+,[0-9]+\)|do\(\)|don't\(\)", instructions):
+    for valid_instruction in findall(r"mul\([0-9]+,[0-9]+\)|do\(\)|don't\(\)", instructions):
         if valid_instruction == "do()":
             active = True
             continue
