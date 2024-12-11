@@ -45,5 +45,5 @@ def get_input(is_test=False):
 
 
 if __name__ == '__main__':
-    print(part_1(get_input()))
-    print(part_2(get_input()))
+    print(f"Part1 solution: {part_1(get_input())}")
+    print(f"Part2 solution: {part_2(get_input())}")

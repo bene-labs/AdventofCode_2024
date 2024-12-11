@@ -1,50 +1,42 @@
+import re
 
-def part_1(reports):
+
+def part_1(instructions: str):
     result = 0
-    for seq in reports:
-        if validate_sequence(seq):
-            result += 1
+    for mul_instruction in re.findall(r"mul\([0-9]+,[0-9]+\)", instructions):
+        num1, num2 = map(int, mul_instruction.removeprefix("mul(").removesuffix(")").split(","))
+        result += num1 * num2
     return result
 
 
-def part_2(reports):
+def part_2(instructions: str):
     result = 0
-    for seq in reports:
-        if validate_sequence(seq):
-            result += 1
+    active = True
+    for valid_instruction in re.findall(r"mul\([0-9]+,[0-9]+\)|do\(\)|don't\(\)", instructions):
+        if valid_instruction == "do()":
+            active = True
             continue
-        valid = False
-        for i in range(len(seq)):
-            s = seq.copy()
-            s.pop(i)
-            if validate_sequence(s):
-                valid = True
-                break
-        if valid:
-            result += 1
+        if valid_instruction == "don't()":
+            active = False
+            continue
+        if not active:
+            continue
+        num1, num2 = map(int, valid_instruction.removeprefix("mul(").removesuffix(")").split(","))
+        result += num1 * num2
     return result
 
 
-def validate_sequence(seq):
-    asc = None
-    for nb1, nb2 in zip(seq, seq[1:]):
-        if asc is None:
-            asc = nb1 < nb2
-        elif (asc and nb1 > nb2) or (not asc and nb1 < nb2):
-            return False
-        if not (0 < abs(nb1 - nb2) <= 3):
-            return False
-    return True
+def get_test_input():
+    with open('inputs/day3Test') as file:
+        return file.read()
 
 
-def get_input(is_test=False):
-    list1 = []
-    with open('inputs/day2' + ("Test" if is_test else "")) as file:
-        for line in file.readlines():
-            list1.append((list(map(int, line.split(" ")))))
-    return list1
+def get_input():
+    with open('inputs/day3') as file:
+        return file.read()
 
 
 if __name__ == '__main__':
-    print(part_1(get_input()))
-    print(part_2(get_input()))
+    instruction = get_input()
+    print(f"Part1 solution: {part_1(instruction)}")
+    print(f"Part2 solution: {part_2(instruction)}")
